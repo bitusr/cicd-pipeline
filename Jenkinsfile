@@ -19,5 +19,11 @@ pipeline {
       }
     }
 
+    stage('Build docker image') {
+      steps {
+        sh 'docker image build -t cicd-pipeline-image .'
+      }
+    }
+
   }
 }
