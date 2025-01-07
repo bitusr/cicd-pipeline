@@ -5,7 +5,7 @@ pipeline {
       agent {
         docker {
           image 'node:22-alpine'
-          volumes ['${WORKSPACE}:/workspace']
+          args "-v ${WORKSPACE}:/workspace"
         }
       }
       steps {
@@ -17,7 +17,7 @@ pipeline {
       agent {
         docker {
           image 'node:22-alpine'
-          volumes ['${WORKSPACE}:/workspace']
+          args "-v ${WORKSPACE}:/workspace"
         }
       }
       steps {
