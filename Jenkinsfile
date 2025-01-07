@@ -5,7 +5,6 @@ pipeline {
       agent {
         docker {
           image 'node:22-alpine'
-          args "-v ${WORKSPACE}:/workspace"
         }
       }
       steps {
@@ -17,7 +16,7 @@ pipeline {
       agent {
         docker {
           image 'node:22-alpine'
-          args "-v ${WORKSPACE}:/workspace"
+          args "-v ${env.WORKSPACE}:${env.WORKSPACE}"
         }
       }
       steps {
