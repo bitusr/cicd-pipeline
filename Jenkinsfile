@@ -4,6 +4,7 @@ pipeline {
     stage('Build') {
       agent {
         docker { image 'node:22-alpine' }
+        volumes ['${WORKSPACE}:/workspace']
       }
       steps {
         sh 'sh ./scripts/build.sh'
@@ -13,6 +14,7 @@ pipeline {
     stage('Test') {
       agent {
         docker { image 'node:22-alpine' }
+        volumes ['${WORKSPACE}:/workspace']
       }
       steps {
         sh 'sh ./scripts/test.sh'
@@ -21,7 +23,10 @@ pipeline {
 
     stage('Build docker image') {
       agent {
-        dockerfile true
+        docker {
+          image 'docker:24.0.5'
+          args '--privileged -v /var/run/docker.sock:/var/run/docker.sock'
+        }
       }
       steps {
         sh 'docker image build -t cicd-pipeline-image .'
