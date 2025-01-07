@@ -3,8 +3,10 @@ pipeline {
   stages {
     stage('Build') {
       agent {
-        docker { image 'node:22-alpine' }
-        volumes ['${WORKSPACE}:/workspace']
+        docker {
+          image 'node:22-alpine'
+          volumes ['${WORKSPACE}:/workspace']
+        }
       }
       steps {
         sh 'sh ./scripts/build.sh'
@@ -13,8 +15,10 @@ pipeline {
 
     stage('Test') {
       agent {
-        docker { image 'node:22-alpine' }
-        volumes ['${WORKSPACE}:/workspace']
+        docker {
+          image 'node:22-alpine'
+          volumes ['${WORKSPACE}:/workspace']
+        }
       }
       steps {
         sh 'sh ./scripts/test.sh'
