@@ -1,58 +1,35 @@
 pipeline {
-  agent none
+  agent any
+
+  environment {
+    DOCKERHUB_CREDS = credentials('dockerhub-creds')
+    DOCKER_IMAGE_NAME = 'bitusr/test-jenkins-pipeline'
+  }
+  
   stages {
     stage('Build') {
-      agent {
-        docker {
-          image 'node:22-alpine'
-        }
-
-      }
       steps {
         sh 'sh ./scripts/build.sh'
       }
     }
 
     stage('Test') {
-      agent {
-        docker {
-          image 'node:22-alpine'
-        }
-
-      }
       steps {
-        sh 'sh ./scripts/build.sh'
         sh 'sh ./scripts/test.sh'
       }
     }
 
     stage('Build docker image') {
-      agent {
-        docker {
-          image 'docker:24.0.5'
-          args '--privileged -v /var/run/docker.sock:/var/run/docker.sock'
-        }
-
-      }
       steps {
-        sh 'docker image build -t cicd-pipeline-image .'
+        sh "docker image build -t $DOCKER_IMAGE_NAME:${BUILD_NUMBER} ."
       }
     }
 
-    stage('') {
-      environment {
-        dockerhub_creds = 'dockerhub-creds'
-      }
+    stage('Publish docker image') {
+      
       steps {
-        script {
-          docker.withRegistry('https://registry.hub.docker.com', 'docker_hub_creds_id')
-
-          {
-            app.push("${env.BUILD_NUMBER}")
-            app.push("latest")
-          }
-        }
-
+        sh "docker login -u $DOCKER_CREDENTIALS_USR -p $DOCKER_CREDENTIALS_PSW"
+        sh "docker push $DOCKER_IMAGE_NAME:${BUILD_NUMBER}"
       }
     }
 
