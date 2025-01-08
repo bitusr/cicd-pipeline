@@ -16,10 +16,10 @@ pipeline {
       agent {
         docker {
           image 'node:22-alpine'
-          args "-v ${env.WORKSPACE}:${env.WORKSPACE}"
         }
       }
       steps {
+        sh 'sh ./scripts/build.sh'
         sh 'sh ./scripts/test.sh'
       }
     }
