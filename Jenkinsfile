@@ -1,6 +1,10 @@
 pipeline {
   agent any
 
+  tools {
+    nodejs 'nodejs-22.12.0'
+  }
+
   environment {
     DOCKERHUB_CREDS = credentials('dockerhub-creds')
     DOCKER_IMAGE_NAME = 'bitusr/test-jenkins-pipeline'
